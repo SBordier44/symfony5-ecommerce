@@ -1,0 +1,25 @@
+{
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.15",
+    "@symfony/stimulus-bridge": "^1.1",
+    "@symfony/webpack-encore": "^0.33",
+    "bootstrap": "^4.5",
+    "core-js": "^3.8",
+    "dotenv": "^8.2",
+    "jquery": "^3.5",
+    "node-sass": "^5.0",
+    "popper.js": "^1.16",
+    "regenerator-runtime": "^0.13",
+    "sass-loader": "^10.1",
+    "stimulus": "^2.0",
+    "webpack-notifier": "^1.12"
+  },
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev-server": "encore dev-server --https --pfx=$HOME/.symfony/certs/default.p12 --port=8080 --disable-host-check",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  }
+}
