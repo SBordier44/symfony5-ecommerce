@@ -29,3 +29,8 @@ build
 .php_cs.cache
 .phpcs-cache
 ###< custom ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###

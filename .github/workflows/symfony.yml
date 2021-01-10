@@ -1,0 +1,58 @@
+name: Full CI process for Symfony 5.x
+on: [ 'push' ]
+jobs:
+  quality:
+    name: Symfony 5.x (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '8.0' ]
+        node-version: [ '15.5' ]
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: 'password'
+        ports:
+          - 3306:3306
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP and PECL extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, imagick, pdo_sqlite, json, dom, filter, gd, pdo, pdo_mysql
+          coverage: xdebug
+        env:
+          update: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --optimize-autoloader --quiet --no-interaction
+
+      - name: Install NPM dependencies
+        run: |
+          npm install
+          npm run build
+
+      - name: Prepare database
+        run: |
+          php bin/console doctrine:database:create
+          php bin/console doctrine:schema:update --force
+          php bin/console doctrine:fixtures:load -n
+
+      - name: Run Functional Tests
+        run: php vendor/bin/simple-phpunit
+
+      - name: Analyze coding style
+        run: php vendor/bin/phpcs
