@@ -37,22 +37,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Get composer cache directory
-        id: get-composer-cache-dir
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v2
-        id: composer-cache
-        with:
-          path: ${{ steps.get-composer-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
       - name: Install Composer dependencies
-        if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       - name: Install NPM dependencies
