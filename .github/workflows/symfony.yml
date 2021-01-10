@@ -9,6 +9,7 @@ jobs:
       matrix:
         operating-system: [ ubuntu-latest ]
         php-versions: [ '8.0' ]
+        node-version: [ '15.5' ]
 
     services:
       mysql:
@@ -31,6 +32,11 @@ jobs:
         env:
           update: true
 
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
       - name: Get composer cache directory
         id: get-composer-cache-dir
         run: |
@@ -48,6 +54,11 @@ jobs:
       - name: Install Composer dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Install NPM dependencies
+        run: |
+          npm install
+          npm run build
 
       - name: Prepare database
         run: |
