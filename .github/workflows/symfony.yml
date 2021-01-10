@@ -1,9 +1,5 @@
 name: Full CI process for Symfony 5.x
-on:
-  push:
-    branches:
-      - main
-      - develop
+on: [ 'push' ]
 jobs:
   quality:
     name: Symfony 5.x (PHP ${{ matrix.php-versions }})
