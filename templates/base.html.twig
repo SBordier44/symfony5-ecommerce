@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+</head>
+<body>
+
+{% include 'partials/_navbar.html.twig' %}
+<div class="container">
+    {% block body %}{% endblock %}
+</div>
+
+{% block javascript %}
+{{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
 </html>
