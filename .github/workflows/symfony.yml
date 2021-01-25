@@ -15,9 +15,7 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_USER: symfony
-          MYSQL_PASSWORD: symfony
+          MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
 
