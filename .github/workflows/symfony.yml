@@ -16,7 +16,6 @@ jobs:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: symshop
           MYSQL_USER: symfony
           MYSQL_PASSWORD: symfony
         ports:
