@@ -5,6 +5,8 @@
 @import "~@fortawesome/fontawesome-free/scss/brands";
 @import "~@fortawesome/fontawesome-free/scss/regular";
 
+@import url('https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap');
+
 label.required:after {
   content: " *";
   color: red;
@@ -13,4 +15,18 @@ label.required:after {
 
 .custom-file-input ~ .custom-file-label:lang(fr)::after {
   content: "Choisir un fichier...";
+}
+
+.navbar-nav > li.active {
+  font-weight: bolder;
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: bolder;
+  font-family: 'Yusei Magic', sans-serif;
+}
+
+.dropdown:hover>.dropdown-menu {
+  display: block;
 }
