@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() ~ ' - ' ~ category.name }}{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item font-italic"><a href="{{ path('home') }}">Accueil</a></li>
+        <li class="breadcrumb-item active font-weight-bold">{{ category.name }}</li>
+    </ol>
+
+    <div class="row">
+        {# {% for product in category.products %}
+            <div class="col-3">
+                {% include('product/_product_card.html.twig') %}
+            </div>
+        {% endfor %} #}
+    </div>
+{% endblock %}
