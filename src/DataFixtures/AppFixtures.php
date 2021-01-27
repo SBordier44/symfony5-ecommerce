@@ -23,7 +23,8 @@ class AppFixtures extends Fixture
             $category
                 ->setDescription($faker->sentence)
                 ->setName($faker->productName)
-                ->setImage($faker->pictureUrl(400, 400) . "?random=" . random_int(1, 100000));
+                ->setImageName('placeholder.jpg')
+                ->setImageSize(random_int(10240, 20480));
 
             $manager->persist($category);
         }
