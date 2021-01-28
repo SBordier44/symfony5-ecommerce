@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() ~ ' - ' ~ product.name }}
+{% endblock %}
+
+{% block body %}
+    {% for type, messages in app.flashes %}
+        <div class="alert alert-{{ type }}">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item font-italic"><a href="{{ path('home') }}">Accueil</a></li>
+        <li class="breadcrumb-item font-italic">
+            <a href="{{ path('category_show', {slug: categoryRequest.slug}) }}">
+                {{ categoryRequest.name }}
+            </a>
+        </li>
+        <li class="breadcrumb-item font-weight-bold active">{{ product.name }}</li>
+    </ol>
+    <h1 class="font-weight-bold h1 mb-4" style="font-family: 'Yusei Magic', sans-serif">{{ product.name }}</h1>
+    <div class="row">
+        <div class="col-4">
+            <img class="img-fluid rounded-lg shadow" src="{{ vich_uploader_asset(product) }}"
+                 alt="{{ product.name }}">
+        </div>
+        <div class="col">
+            {% for category in product.categories %}
+                <a href="{{ path('category_show', {slug: category.slug}) }}"
+                   class="badge badge-primary mr-1">{{ category.name }}</a>
+            {% endfor %}
+            <p class="mt-4 mb-4">{{ product.description }}</p>
+            <br>
+            <span class="text-muted h2">
+                {{ product.unitPrice | amountEURWithVat(product.vat) }}
+            </span>
+            <br>
+            <a href="#" class="btn btn-success float-right mt-4">
+                <i class="fas fa-cart-plus mr-1"></i>Ajouter au panier
+            </a>
+        </div>
+    </div>
+{% endblock %}

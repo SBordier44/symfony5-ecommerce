@@ -1,13 +1,16 @@
-<div class="card">
-    <img src="{{ product.mainPicture }}" class="img-fluid" alt="{{ product.name }}">
+<div class="card h-100 shadow-lg rounded">
+    <img src="{{ vich_uploader_asset(product) }}" class="img-fluid rounded card-img-top" alt="{{ product.name }}">
     <div class="card-body">
-        <h4 class="card-title">{{ product.name }} ({{ product.price | amountEuro }})</h4>
-        <span class="badge badge-info">
-                            {{ product.category.name }}
-                        </span>
-        <p class="card-text">{{ product.shortDescription }}</p>
-        <a href="{{ path('product_show', {category_slug: product.category.slug, slug: product.slug}) }}"
-           class="btn btn-primary btn-sm">Détails</a>
-        <a href="{{ path('cart_add', {id: product.id}) }}" class="btn btn-success btn-sm">Ajouter</a>
+        <h4 class="card-title">{{ product.name }}</h4>
+        <span class="text-muted h4">{{ product.unitPrice | amountEURWithVat(product.vat) }}</span>
+        <br>
+        <p class="card-text mt-4 ml-2">{{ product.description }}</p>
+    </div>
+    <div class="card-footer text-center">
+        <a href="{{ path('product_show', {categorySlug: product.categories[0].slug, slug: product.slug}) }}"
+           class="btn btn-primary btn-sm">
+            <i class="fas fa-eye mr-1"></i>Détails
+        </a>
+        <a href="#" class="ml-2 btn btn-success btn-sm"><i class="fas fa-cart-plus mr-1"></i>Ajouter au panier</a>
     </div>
 </div>

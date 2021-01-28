@@ -80,9 +80,10 @@ class Product
     private ?int $unitPrice;
 
     /**
-     * @ORM\Column(type="decimal", precision=5, scale=2)
+     * @ORM\ManyToOne(targetEntity=Vat::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private ?float $vat;
+    private ?Vat $vat;
 
     public function __construct()
     {
@@ -190,18 +191,6 @@ class Product
         return $this;
     }
 
-    public function getVat(): ?string
-    {
-        return $this->vat;
-    }
-
-    public function setVat(float $vat): self
-    {
-        $this->vat = $vat;
-
-        return $this;
-    }
-
     /**
      * @return File|null
      */
@@ -256,6 +245,18 @@ class Product
     public function setImageSize(?int $imageSize): Product
     {
         $this->imageSize = $imageSize;
+        return $this;
+    }
+
+    public function getVat(): ?Vat
+    {
+        return $this->vat;
+    }
+
+    public function setVat(?Vat $vat): self
+    {
+        $this->vat = $vat;
+
         return $this;
     }
 }
