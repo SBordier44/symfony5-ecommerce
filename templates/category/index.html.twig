@@ -9,10 +9,10 @@
     </ol>
 
     <div class="row">
-        {# {% for product in category.products %}
-            <div class="col-3">
-                {% include('product/_product_card.html.twig') %}
+        {% for product in category.products %}
+            <div class="col-3 pb-4">
+                {% include('partials/_product_card.html.twig') %}
             </div>
-        {% endfor %} #}
+        {% endfor %}
     </div>
 {% endblock %}

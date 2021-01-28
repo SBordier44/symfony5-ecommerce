@@ -12,7 +12,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 class TimestampEntitySubscriber implements EventSubscriber
 {
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::prePersist,
@@ -22,11 +22,15 @@ class TimestampEntitySubscriber implements EventSubscriber
 
     public function prePersist(LifecycleEventArgs $args): void
     {
-        $args->getObject()->setCreatedAt(new DateTime());
+        if (method_exists($args->getObject(), 'setCreatedAt')) {
+            $args->getObject()->setCreatedAt(new DateTime());
+        }
     }
 
     public function preUpdate(LifecycleEventArgs $args): void
     {
-        $args->getObject()->setUpdatedAt(new DateTime());
+        if (method_exists($args->getObject(), 'setUpdatedAt')) {
+            $args->getObject()->setUpdatedAt(new DateTime());
+        }
     }
 }

@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\Product;
+use App\Entity\Vat;
 use Bezhanov\Faker\ProviderCollectionHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -17,16 +19,44 @@ class AppFixtures extends Fixture
         ProviderCollectionHelper::addAllProvidersTo($faker);
         $faker->addProvider(new Picture($faker));
 
+        // Vat
+        $vats = [20.0, 10.0, 5.5, 2.1, 0.0];
+        $vatObjects = [];
+        foreach ($vats as $val) {
+            $vat = new Vat();
+            $vat->setLabel($val . ' %')
+                ->setValue($val);
+            $manager->persist($vat);
+            $vatObjects[] = $vat;
+        }
+
         // Categories
-        for ($i = 0; $i < 5; $i++) {
+        for ($c = 0; $c < 5; $c++) {
             $category = new Category();
             $category
                 ->setDescription($faker->sentence)
-                ->setName($faker->productName)
+                ->setName($faker->department)
                 ->setImageName('placeholder.jpg')
-                ->setImageSize(random_int(10240, 20480));
+                ->setImageSize(2800);
 
             $manager->persist($category);
+
+            // Products
+            for ($p = 0; $p < random_int(5, 25); $p++) {
+                $product = new Product();
+                $product
+                    ->setName($faker->productName)
+                    ->setDescription($faker->sentence)
+                    ->setImageName('placeholder.jpg')
+                    ->setImageSize(2800)
+                    ->setSku($faker->uuid)
+                    ->setUnitPrice(random_int(1000, 25000))
+                    ->setVat($faker->randomElement($vatObjects))
+                    ->setStock(random_int(1, 20))
+                    ->addCategory($category);
+
+                $manager->persist($product);
+            }
         }
 
         $manager->flush();

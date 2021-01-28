@@ -28,4 +28,9 @@ final class Version20210127220617 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE category ADD image VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, DROP image_name, DROP image_size');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

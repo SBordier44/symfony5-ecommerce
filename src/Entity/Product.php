@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @Vich\Uploadable
  */
-class Category
+class Product
 {
     use TimestampableTrait;
 
@@ -30,17 +30,32 @@ class Category
     private mixed $id;
 
     /**
-     * @ORM\Column(type="string", length=120)
+     * @ORM\Column(type="string", length=255)
      */
     private ?string $name;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text")
      */
     private ?string $description;
 
     /**
-     * @Vich\UploadableField(mapping="category_image", fileNameProperty="imageName", size="imageSize")
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $slug = null;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $stock = 0;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $sku;
+
+    /**
+     * @Vich\UploadableField(mapping="product_image", fileNameProperty="imageName", size="imageSize")
      */
     private ?File $imageFile = null;
 
@@ -55,21 +70,27 @@ class Category
     private ?int $imageSize;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="products")
      */
-    private ?string $slug = null;
+    private Collection $categories;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="categories")
+     * @ORM\Column(type="integer")
      */
-    private $products;
+    private ?int $unitPrice;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Vat::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Vat $vat;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
-    public function getId(): mixed
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -91,7 +112,7 @@ class Category
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -110,6 +131,66 @@ class Category
         return $this;
     }
 
+    public function getStock(): ?int
+    {
+        return $this->stock;
+    }
+
+    public function setStock(int $stock): self
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getSku(): ?string
+    {
+        return $this->sku;
+    }
+
+    public function setSku(?string $sku): self
+    {
+        $this->sku = $sku;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getUnitPrice(): ?int
+    {
+        return $this->unitPrice;
+    }
+
+    public function setUnitPrice(int $unitPrice): self
+    {
+        $this->unitPrice = $unitPrice;
+
+        return $this;
+    }
+
     /**
      * @return File|null
      */
@@ -120,9 +201,9 @@ class Category
 
     /**
      * @param File|null $imageFile
-     * @return Category
+     * @return Product
      */
-    public function setImageFile(?File $imageFile = null): Category
+    public function setImageFile(?File $imageFile = null): Product
     {
         $this->imageFile = $imageFile;
         if (null !== $imageFile) {
@@ -141,9 +222,9 @@ class Category
 
     /**
      * @param string|null $imageName
-     * @return Category
+     * @return Product
      */
-    public function setImageName(?string $imageName): Category
+    public function setImageName(?string $imageName): Product
     {
         $this->imageName = $imageName;
         return $this;
@@ -159,37 +240,22 @@ class Category
 
     /**
      * @param int|null $imageSize
-     * @return Category
+     * @return Product
      */
-    public function setImageSize(?int $imageSize): Category
+    public function setImageSize(?int $imageSize): Product
     {
         $this->imageSize = $imageSize;
         return $this;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
+    public function getVat(): ?Vat
     {
-        return $this->products;
+        return $this->vat;
     }
 
-    public function addProduct(Product $product): self
+    public function setVat(?Vat $vat): self
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->addCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->removeElement($product)) {
-            $product->removeCategory($this);
-        }
+        $this->vat = $vat;
 
         return $this;
     }
