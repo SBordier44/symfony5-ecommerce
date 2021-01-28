@@ -7,9 +7,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        operating-system: [ ubuntu-latest ]
-        php-versions: [ '8.0' ]
-        node-version: [ '15.5' ]
+        operating-system: [ ubuntu-20.04 ]
+        php-versions: [ 8 ]
+        node-version: [ 15 ]
 
     services:
       mysql:
@@ -42,8 +42,8 @@ jobs:
 
       - name: Install NPM dependencies
         run: |
-          npm install
-          npm run build
+          yarn install
+          yarn build
 
       - name: Prepare database
         run: |
@@ -51,8 +51,8 @@ jobs:
           php bin/console doctrine:schema:update --force
           php bin/console doctrine:fixtures:load -n
 
-      - name: Run Functional Tests
-        run: php vendor/bin/simple-phpunit
-
       - name: Analyze coding style
         run: php vendor/bin/phpcs
+
+      - name: Run Functional Tests
+        run: php vendor/bin/simple-phpunit
