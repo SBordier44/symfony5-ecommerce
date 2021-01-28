@@ -129,7 +129,7 @@ class User implements UserInterface
     /**
      * @return Collection|Address[]
      */
-    public function getAddresses(): Collection|array
+    public function getAddresses(): Collection | array
     {
         return $this->addresses;
     }

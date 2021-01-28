@@ -160,7 +160,7 @@ class Product
     /**
      * @return Collection|Category[]
      */
-    public function getCategories(): Collection|array
+    public function getCategories(): Collection | array
     {
         return $this->categories;
     }

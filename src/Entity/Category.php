@@ -172,7 +172,7 @@ class Category
     /**
      * @return Collection|Product[]
      */
-    public function getProducts(): Collection|array
+    public function getProducts(): Collection | array
     {
         return $this->products;
     }
