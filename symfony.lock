@@ -120,6 +120,9 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.2"
     },
+    "jetbrains/phpstorm-attributes": {
+        "version": "1.0"
+    },
     "jms/metadata": {
         "version": "2.4.0"
     },

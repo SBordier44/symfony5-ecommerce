@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -62,8 +63,9 @@ class Category
     /**
      * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="categories")
      */
-    private $products;
+    private Collection $products;
 
+    #[Pure]
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -170,7 +172,7 @@ class Category
     /**
      * @return Collection|Product[]
      */
-    public function getProducts(): Collection
+    public function getProducts(): Collection|array
     {
         return $this->products;
     }

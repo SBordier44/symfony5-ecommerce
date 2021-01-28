@@ -2,22 +2,64 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Address;
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\User;
 use App\Entity\Vat;
 use Bezhanov\Faker\ProviderCollectionHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use WW\Faker\Provider\Picture;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(protected UserPasswordEncoderInterface $passwordEncoder)
+    {
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
         ProviderCollectionHelper::addAllProvidersTo($faker);
         $faker->addProvider(new Picture($faker));
+
+        // User
+        $users = [];
+        for ($u = 0; $u < 10; $u++) {
+            $user = new User();
+            $roles = [User::ROLE_USER];
+            if ($u === 0) {
+                $roles[] = User::ROLE_ADMIN;
+            }
+            $user
+                ->setEmail($u === 0 ? 'admin@symshop.com' : "mail$u@gmail.com")
+                ->setPassword($this->passwordEncoder->encodePassword($user, $u === 0 ? 'admin' : 'password'))
+                ->setRoles($roles);
+
+            $manager->persist($user);
+
+            // Addresses
+            for ($a = 0; $a < random_int(1, 3); $a++) {
+                $address = new Address();
+                $address
+                    ->setFirstName($faker->firstName)
+                    ->setLastName($faker->lastName)
+                    ->setBirthDate($faker->dateTimeThisCentury)
+                    ->setStreet($faker->streetAddress)
+                    ->setZipCode($faker->postcode)
+                    ->setCity($faker->city)
+                    ->setCountry($faker->country)
+                    ->setAddressName($faker->randomElement(['Maison', 'Travail', 'Parents']))
+                    ->setInvoiceDefault($a === 0)
+                    ->setDeliveryDefault($a === 0)
+                    ->setUser($user);
+                $user->addAddress($address);
+                $manager->persist($address);
+            }
+        }
 
         // Vat
         $vats = [20.0, 10.0, 5.5, 2.1, 0.0];
