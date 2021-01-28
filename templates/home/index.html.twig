@@ -3,16 +3,16 @@
 {% block title %}{{ parent() ~ ' - ' ~ pageTitle }}{% endblock %}
 
 {% block body %}
-    <h1>Nos produits phares</h1>
-    <div class="row">
-        {# {% for product in products %}
-            <div class="col">
-                {% include('product/_product_card.html.twig') %}
+    <h1 class="text-center font-weight-bold" style="font-family: 'Yusei Magic', sans-serif">Les dernières arrivées</h1>
+    <div class="row mt-4">
+        {% for product in products %}
+            <div class="col-3 pb-4">
+                {% include('partials/_product_card.html.twig') %}
             </div>
-        {% endfor %} #}
+        {% endfor %}
     </div>
     <hr>
-    <h2>Un service irreprochable !</h2>
+    <h2>Un service de qualité !</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad dicta, dolores excepturi illo itaque
         laborum maxime nesciunt nisi nulla officiis quidem, quis recusandae unde voluptas. Molestias nostrum officiis
         saepe!</p>

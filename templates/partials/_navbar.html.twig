@@ -7,16 +7,19 @@
     <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto ml-auto">
             {% for category in categoryRepository.findAll() %}
-                <li class="nav-item {% if app.request.get('slug') == category.slug %}active{% endif %}">
-                    <a class="nav-link" href="{{ path('category.show', {slug: category.slug}) }}">{{ category.name }}
-                        <span class="sr-only">(current)</span>
+                <li class="nav-item {% if app.request.get('slug') == category.slug or app.request.get('categorySlug') == category.slug %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('category_show', {slug: category.slug}) }}">{{ category.name }}
+                        {% if app.request.get('slug') == category.slug or app.request.get('categorySlug') == category.slug %}
+                            <span class="sr-only">(current)</span>
+                        {% endif %}
                     </a>
                 </li>
             {% endfor %}
         </ul>
         <ul class="navbar-nav pr-4">
             <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false">
                     <i class="fas fa-shopping-cart mr-2"></i>Panier (0 €)
                 </a>
                 <div class="dropdown-menu" style="">
