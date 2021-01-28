@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -85,6 +86,7 @@ class Product
      */
     private ?Vat $vat;
 
+    #[Pure]
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -158,7 +160,7 @@ class Product
     /**
      * @return Collection|Category[]
      */
-    public function getCategories(): Collection
+    public function getCategories(): Collection | array
     {
         return $this->categories;
     }

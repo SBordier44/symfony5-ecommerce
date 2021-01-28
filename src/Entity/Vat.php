@@ -8,6 +8,7 @@ use App\Repository\VatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 
 /**
@@ -38,8 +39,9 @@ class Vat
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="vat")
      */
-    private $products;
+    private Collection $products;
 
+    #[Pure]
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -77,7 +79,7 @@ class Vat
     /**
      * @return Collection|Product[]
      */
-    public function getProducts(): Collection
+    public function getProducts(): Collection | array
     {
         return $this->products;
     }
@@ -95,7 +97,6 @@ class Vat
     public function removeProduct(Product $product): self
     {
         if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
             if ($product->getVat() === $this) {
                 $product->setVat(null);
             }
