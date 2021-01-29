@@ -38,7 +38,7 @@ class ResetPasswordController extends AbstractController
         $this->translator = $translator;
     }
 
-    #[Route('', name: '/reset-password/app_forgot_password_request')]
+    #[Route('/reset-password', name: 'app_forgot_password_request')]
     public function request(
         Request $request,
         MailerInterface $mailer
