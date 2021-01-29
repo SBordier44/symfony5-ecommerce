@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksPassword;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -43,6 +44,8 @@ class User implements UserInterface
     /**
      * @var string|null The hashed password
      * @ORM\Column(type="string")
+     * @RollerworksPassword\PasswordStrength(minLength=8, minStrength=4)
+     * @RollerworksPassword\PasswordRequirements(requireLetters=true, requireNumbers=true, requireCaseDiff=true)
      */
     private ?string $password;
 
