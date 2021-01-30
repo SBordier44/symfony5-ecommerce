@@ -10,11 +10,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksPassword;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface
 {
@@ -44,8 +45,6 @@ class User implements UserInterface
     /**
      * @var string|null The hashed password
      * @ORM\Column(type="string")
-     * @RollerworksPassword\PasswordStrength(minLength=8, minStrength=4)
-     * @RollerworksPassword\PasswordRequirements(requireLetters=true, requireNumbers=true, requireCaseDiff=true)
      */
     private ?string $password;
 
@@ -132,7 +131,7 @@ class User implements UserInterface
     /**
      * @return Collection|Address[]
      */
-    public function getAddresses(): Collection | array
+    public function getAddresses(): Collection|array
     {
         return $this->addresses;
     }

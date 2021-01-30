@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -29,13 +30,15 @@ class ChangePasswordFormType extends AbstractType
                                     'message' => 'Veuillez renseigner un mot de passe',
                                 ]
                             ),
-                            new Length(
+                            new PasswordRequirements(
                                 [
-                                    'min' => 8,
-                                    'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
-                                    'max' => 4096,
+                                    'requireLetters' => true,
+                                    'requireSpecialCharacter' => true,
+                                    'requireNumbers' => true,
+                                    'requireCaseDiff' => true,
+                                    'minLength' => 8
                                 ]
-                            ),
+                            )
                         ],
                         'label' => 'Nouveau mot de passe',
                     ],
