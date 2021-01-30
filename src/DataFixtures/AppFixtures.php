@@ -35,6 +35,8 @@ class AppFixtures extends Fixture
                 $roles[] = User::ROLE_ADMIN;
             }
             $user
+                ->setLastName($u === 0 ? 'Admin' : $faker->lastName)
+                ->setFirstName($u === 0 ? 'Admin' : $faker->firstName)
                 ->setEmail($u === 0 ? 'admin@symshop.com' : "customer$u@gmail.com")
                 ->setPassword($this->passwordEncoder->encodePassword($user, $u === 0 ? 'admin' : 'password'))
                 ->setRoles($roles);

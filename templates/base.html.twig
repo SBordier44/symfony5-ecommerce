@@ -12,6 +12,9 @@
 
 {% include 'partials/_navbar.html.twig' %}
 <div class="container">
+    {% for message in app.flashes('registration_and_login_success') %}
+        <div class="alert alert-success" role="alert">{{ message|raw }}</div>
+    {% endfor %}
     {% block body %}{% endblock %}
 </div>
 {% include 'partials/_footer.html.twig' %}

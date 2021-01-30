@@ -24,15 +24,10 @@ class ResetPasswordRequestFormType extends AbstractType
                         'placeholder' => 'Veuillez renseigner votre Email'
                     ],
                     'constraints' => [
-                        new NotBlank(
-                            [
-                                'message' => 'Veuillez entrer votre adresse Email',
-                            ]
-                        ),
+                        new NotBlank(message: 'Veuillez entrer votre adresse Email'),
                         new Email(
-                            [
-                                'message' => 'Veuillez renseigner une adresse Email valide'
-                            ]
+                            message: 'Veuillez renseigner une adresse Email valide',
+                            mode: Email::VALIDATION_MODE_STRICT
                         )
                     ],
                 ]

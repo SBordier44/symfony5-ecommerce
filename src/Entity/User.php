@@ -12,10 +12,11 @@ use JetBrains\PhpStorm\Pure;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"email"}, message="Cette adresse email est déjà utilisée.", errorPath="email")
  */
 class User implements UserInterface
 {
@@ -52,6 +53,16 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Address::class, mappedBy="user")
      */
     private Collection $addresses;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $LastName;
 
     #[Pure]
     public function __construct()
@@ -131,7 +142,7 @@ class User implements UserInterface
     /**
      * @return Collection|Address[]
      */
-    public function getAddresses(): Collection|array
+    public function getAddresses(): Collection | array
     {
         return $this->addresses;
     }
@@ -153,6 +164,30 @@ class User implements UserInterface
                 $address->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->LastName;
+    }
+
+    public function setLastName(string $LastName): self
+    {
+        $this->LastName = $LastName;
 
         return $this;
     }

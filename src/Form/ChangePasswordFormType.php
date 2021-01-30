@@ -25,11 +25,7 @@ class ChangePasswordFormType extends AbstractType
                     'type' => PasswordType::class,
                     'first_options' => [
                         'constraints' => [
-                            new NotBlank(
-                                [
-                                    'message' => 'Veuillez renseigner un mot de passe',
-                                ]
-                            ),
+                            new NotBlank(message: 'Veuillez renseigner un mot de passe'),
                             new PasswordRequirements(
                                 [
                                     'requireLetters' => true,
@@ -38,6 +34,10 @@ class ChangePasswordFormType extends AbstractType
                                     'requireCaseDiff' => true,
                                     'minLength' => 8
                                 ]
+                            ),
+                            new Length(
+                                max: 4096,
+                                maxMessage: 'Votre mot de passe doit avoir moins de {{ limit }} caractères'
                             )
                         ],
                         'label' => 'Nouveau mot de passe',
