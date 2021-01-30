@@ -14,7 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="Cette adresse email est déjà utilisée.", errorPath="email")
@@ -143,7 +142,7 @@ class User implements UserInterface
     /**
      * @return Collection|Address[]
      */
-    public function getAddresses(): Collection|array
+    public function getAddresses(): Collection | array
     {
         return $this->addresses;
     }
