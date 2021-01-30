@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class LoginType extends AbstractType
 {
@@ -22,6 +24,12 @@ class LoginType extends AbstractType
                     'label' => 'Adresse Email',
                     'attr' => [
                         'placeholder' => 'Votre adresse Email'
+                    ],
+                    'constraints' => [
+                        new Email(
+                            message: 'Veuillez renseigner une adresse Email valide',
+                            mode: Email::VALIDATION_MODE_STRICT
+                        )
                     ]
                 ]
             )
@@ -32,6 +40,9 @@ class LoginType extends AbstractType
                     'label' => 'Mot de passe',
                     'attr' => [
                         'placeholder' => 'Votre mot de passe'
+                    ],
+                    'constraints' => [
+                        new NotBlank(message: 'Veuillez renseigner un mot de passe')
                     ]
                 ]
             );
