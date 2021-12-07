@@ -7,17 +7,19 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        operating-system: [ ubuntu-20.04 ]
+        operating-system: [ ubuntu-latest ]
         php-versions: [ 8 ]
-        node-version: [ 15 ]
+        node-version: [ 17 ]
 
     services:
-      mysql:
-        image: mysql:8
+      postgresql:
+        image: postgres:13-alpine
         env:
-          MYSQL_ROOT_PASSWORD: root
+          POSTGRES_DB: app
+          POSTGRES_PASSWORD: ChangeMe
+          POSTGRES_USER: symfony
         ports:
-          - 3306:3306
+          - 5432:5432
 
     steps:
       - name: Checkout
