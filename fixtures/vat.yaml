@@ -1,0 +1,13 @@
+App\Entity\Vat:
+  vat_20.0:
+    label: 20%
+    value: 20.0
+  vat_10.0:
+    label: 10%
+    value: 10.0
+  vat_5.5:
+    label: 5,5%
+    value: 5.5
+  vat_0:
+    label: Exonéré
+    value: 0

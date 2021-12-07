@@ -28,10 +28,8 @@
                  alt="{{ product.name }}">
         </div>
         <div class="col">
-            {% for category in product.categories %}
-                <a href="{{ path('category_show', {slug: category.slug}) }}"
-                   class="badge badge-primary mr-1">{{ category.name }}</a>
-            {% endfor %}
+            <a href="{{ path('category_show', {slug: product.category.slug}) }}"
+               class="badge badge-primary mr-1">{{ product.category.name }}</a>
             <p class="mt-4 mb-4">{{ product.description }}</p>
             <br>
             <span class="text-muted h2">

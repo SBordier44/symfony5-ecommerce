@@ -1,0 +1,15 @@
+App\Entity\User:
+  user_admin:
+    roles:
+      - ROLE_ADMIN
+    firstName: Admin
+    lastName: Admin
+    email: admin@symshop.com
+    password: <hashPassword('admin')>
+  user_{1..10}:
+    roles:
+      - ROLE_USER
+    firstName: <firstName()>
+    lastName: <lastName()>
+    email: 'customer<current()>\@symshop.com'
+    password: <hashPassword('admin')>

@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 trait TimestampableTrait
 {
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $updatedAt;
 
     public function getCreatedAt(): ?DateTimeInterface

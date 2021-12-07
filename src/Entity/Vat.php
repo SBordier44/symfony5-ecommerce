@@ -7,47 +7,35 @@ namespace App\Entity;
 use App\Repository\VatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
+use Symfony\Component\Uid\Uuid;
 
-/**
- * @ORM\Entity(repositoryClass=VatRepository::class)
- */
+#[ORM\Entity(repositoryClass: VatRepository::class)]
 class Vat
 {
     use TimestampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
-     */
-    private mixed $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private Uuid $id;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: Types::STRING, length: 50)]
     private ?string $label;
 
-    /**
-     * @ORM\Column(type="decimal", precision=5, scale=2)
-     */
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
     private ?float $value;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="vat")
-     */
+    #[ORM\OneToMany(mappedBy: 'vat', targetEntity: Product::class)]
     private Collection $products;
 
-    #[Pure]
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->products = new ArrayCollection();
     }
 
-    public function getId(): mixed
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -79,7 +67,7 @@ class Vat
     /**
      * @return Collection|Product[]
      */
-    public function getProducts(): Collection | array
+    public function getProducts(): Collection|array
     {
         return $this->products;
     }
@@ -96,10 +84,8 @@ class Vat
 
     public function removeProduct(Product $product): self
     {
-        if ($this->products->removeElement($product)) {
-            if ($product->getVat() === $this) {
-                $product->setVat(null);
-            }
+        if ($this->products->removeElement($product) && $product->getVat() === $this) {
+            $product->setVat(null);
         }
 
         return $this;

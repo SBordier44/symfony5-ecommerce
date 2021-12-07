@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+  app.fixture.datafixtures.providers.helpers.number_featured_products: 8
 
 services:
   # default configuration for services in *this* file
@@ -21,14 +22,11 @@ services:
       - '../src/Kernel.php'
       - '../src/Tests/'
 
-  # controllers are imported separately to make sure services can be injected
-  # as action arguments even if you don't extend any base controller class
-  App\Controller\:
-    resource: '../src/Controller/'
-    tags: [ 'controller.service_arguments' ]
-
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
+
+  App\EventSubscriber\LocaleSubscriber:
+    arguments: [ '%kernel.default_locale%' ]
 
   App\EventListener\TimestampEntitySubscriber:
     tags:
@@ -45,3 +43,13 @@ services:
       - name: doctrine.orm.entity_listener
         event: prePersist
         entity: App\Entity\Product
+
+  # Alice Providers
+  App\DataFixtures\Providers\HashPasswordProvider:
+    tags: [ { name: nelmio_alice.faker.provider } ]
+
+  Bezhanov\Faker\Provider\Commerce: ~
+
+  App\DataFixtures\Providers\HelpersProvider:
+    tags: [ { name: nelmio_alice.faker.provider } ]
+  #end

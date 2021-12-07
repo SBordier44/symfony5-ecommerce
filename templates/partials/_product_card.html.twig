@@ -1,13 +1,23 @@
 <div class="card h-100 shadow-lg rounded">
+    {% if product.discountPercentage %}
+        <div class="ribbon ribbon-top-right"><span>Promotion</span></div>
+    {% endif %}
     <img src="{{ vich_uploader_asset(product) }}" class="img-fluid rounded card-img-top" alt="{{ product.name }}">
     <div class="card-body">
         <h4 class="card-title">{{ product.name }}</h4>
-        <span class="text-muted h4">{{ product.unitPrice | amountEURWithVat(product.vat) }}</span>
+        {% if product.discountPercentage %}
+            <span class="text-muted h6"><del>{{ product.unitPrice | amountEURWithVat(product.vat) }}</del></span>
+            <br><span class="text-warning h4">
+                {{ (product.unitPrice - (product.unitPrice * product.discountPercentage / 100)) | amountEURWithVat(product.vat) }}
+            </span> <span class="text-muted">(-{{ product.discountPercentage }}%)</span>
+        {% else %}
+            <span class="text-muted h4">{{ product.unitPrice | amountEURWithVat(product.vat) }}</span>
+        {% endif %}
         <br>
         <p class="card-text mt-4 ml-2">{{ product.description }}</p>
     </div>
     <div class="card-footer text-center">
-        <a href="{{ path('product_show', {categorySlug: product.categories[0].slug, slug: product.slug}) }}"
+        <a href="{{ path('product_show', {categorySlug: product.category.slug, slug: product.slug}) }}"
            class="btn btn-primary btn-sm">
             <i class="fas fa-eye mr-1"></i>Détails
         </a>

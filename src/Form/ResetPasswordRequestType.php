@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class ResetPasswordRequestFormType extends AbstractType
+class ResetPasswordRequestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -26,8 +26,7 @@ class ResetPasswordRequestFormType extends AbstractType
                     'constraints' => [
                         new NotBlank(message: 'Veuillez entrer votre adresse Email'),
                         new Email(
-                            message: 'Veuillez renseigner une adresse Email valide',
-                            mode: Email::VALIDATION_MODE_STRICT
+                            message: 'Veuillez renseigner une adresse email valide'
                         )
                     ],
                 ]

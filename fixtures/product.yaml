@@ -1,0 +1,13 @@
+App\Entity\Product:
+  product_{1..150}:
+    name: <productName()>
+    description: <sentence()>
+    imageName: placeholder.jpg
+    imageSize: 2800
+    setSku: <uuid()>
+    unitPrice: <numberBetween(1000,50000)>
+    vat: '@vat_20.0'
+    stock: <numberBetween(0,50)>
+    category: '@category_*'
+    discountPercentage: '15%? <randomElement([0, 15, 25, 30, 50])>: 0'
+    featured: <hasFeaturedProduct(<current()>)>

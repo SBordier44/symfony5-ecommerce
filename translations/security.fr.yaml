@@ -15,3 +15,4 @@
 'Account is locked.': 'Le compte est bloqué.'
 'Too many failed login attempts, please try again later.': 'Plusieurs tentatives de connexion ont échoué, veuillez réessayer plus tard.'
 'Invalid or expired login link.': 'Lien de connexion invalide ou expiré.'
+'Invalid request': 'Requête invalide.'

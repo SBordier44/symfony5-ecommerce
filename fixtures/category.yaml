@@ -1,0 +1,16 @@
+App\Entity\Category:
+  category_jeans:
+    name: Jeans
+    description: <sentence()>
+  category_pulls:
+    name: Pulls
+    description: <sentence()>
+  category_manteaux:
+    name: Manteaux
+    description: <sentence()>
+  category_chaussures:
+    name: Chaussures
+    description: <sentence()>
+  category_accessoires:
+    name: Accessoires
+    description: <sentence()>
