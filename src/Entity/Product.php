@@ -6,93 +6,67 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\Uuid;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @ORM\Entity(repositoryClass=ProductRepository::class)
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
     use TimestampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
-     */
-    private mixed $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private Uuid $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $slug = null;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $stock = 0;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $sku;
 
-    /**
-     * @Vich\UploadableField(mapping="product_image", fileNameProperty="imageName", size="imageSize")
-     */
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'imageName', size: 'imageSize')]
     private ?File $imageFile = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $imageName;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?int $imageSize;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="products")
-     */
-    private Collection $categories;
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
+    private Category $category;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private ?int $unitPrice;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $unitPrice = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Vat::class, inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Vat::class, inversedBy: 'products')]
     private ?Vat $vat;
 
-    #[Pure]
+    #[ORM\Column(type: 'float', options: ['default' => 0.00])]
+    private ?float $discountPercentage;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $featured = false;
+
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
+        $this->id = Uuid::v4();
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -157,27 +131,14 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection|Category[]
-     */
-    public function getCategories(): Collection | array
+    public function getCategory(): ?Category
     {
-        return $this->categories;
+        return $this->category;
     }
 
-    public function addCategory(Category $category): self
+    public function setCategory(?Category $category): self
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        $this->categories->removeElement($category);
-
+        $this->category = $category;
         return $this;
     }
 
@@ -258,6 +219,30 @@ class Product
     public function setVat(?Vat $vat): self
     {
         $this->vat = $vat;
+
+        return $this;
+    }
+
+    public function getDiscountPercentage(): ?float
+    {
+        return $this->discountPercentage;
+    }
+
+    public function setDiscountPercentage(float $discountPercentage): self
+    {
+        $this->discountPercentage = $discountPercentage;
+
+        return $this;
+    }
+
+    public function getFeatured(): ?bool
+    {
+        return $this->featured;
+    }
+
+    public function setFeatured(bool $featured): self
+    {
+        $this->featured = $featured;
 
         return $this;
     }

@@ -7,3 +7,7 @@ twig:
         paths:
             '%kernel.project_dir%/vendor/knplabs/knp-paginator-bundle/templates': KnpPaginator
         categoryRepository: '@App\Repository\CategoryRepository'
+
+when@test:
+    twig:
+        strict_variables: true

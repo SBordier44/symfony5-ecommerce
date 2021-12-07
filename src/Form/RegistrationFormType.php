@@ -8,7 +8,7 @@ use App\Entity\User;
 use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,7 +30,7 @@ class RegistrationFormType extends AbstractType
                         'placeholder' => 'Veuillez renseigner votre nom de famille'
                     ],
                     'constraints' => [
-                        new NotBlank(message: 'Veuillez renseigner votre nom'),
+                        new NotBlank(message: 'Le nom de famille est obligatoire'),
                         new Length(
                             [
                                 'min' => 3
@@ -48,7 +48,7 @@ class RegistrationFormType extends AbstractType
                         'placeholder' => 'Veuillez renseigner votre prénom'
                     ],
                     'constraints' => [
-                        new NotBlank(message: 'Veuillez renseigner votre prénom'),
+                        new NotBlank(message: 'Le prénom est obligatoire'),
                         new Length(min: 3)
                     ]
                 ]
@@ -62,49 +62,55 @@ class RegistrationFormType extends AbstractType
                         'placeholder' => 'Renseignez votre adresse Email'
                     ],
                     'constraints' => [
-                        new NotBlank(message: 'Veuillez renseigner votre adresse Email'),
+                        new NotBlank(message: "L'adresse email est obligatoire"),
                         new Email(
-                            message: 'Veuillez renseigner une adresse Email valide',
-                            mode: Email::VALIDATION_MODE_STRICT
+                            message: 'Veuillez renseigner une adresse email valide'
                         )
                     ]
                 ]
             )
-            ->add(
-                'plainPassword',
-                PasswordType::class,
-                [
-                    'mapped' => false,
-                    'label' => 'Votre mot de passe',
+            ->add('plainPassword', RepeatedType::class, [
+                'mapped' => false,
+                'required' => true,
+                'attr' => ['autocomplete' => 'new-password'],
+                'constraints' => [
+                    new NotBlank(message: 'Le mot de passe est obligatoire'),
+                    new Length([
+                        'min' => 6,
+                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
+                        'max' => 4096,
+                    ]),
+                    new PasswordRequirements(
+                        options: [
+                            'requireLetters' => true,
+                            'requireSpecialCharacter' => true,
+                            'requireNumbers' => true,
+                            'requireCaseDiff' => true,
+                            'minLength' => 8
+                        ]
+                    )
+                ],
+                'first_options' => [
+                    'label' => 'Mot de passe',
                     'attr' => [
-                        'placeholder' => 'Veuillez renseigner un mot de passe'
-                    ],
-                    'constraints' => [
-                        new NotBlank(message: 'Veuillez renseigner un mot de passe'),
-                        new PasswordRequirements(
-                            options: [
-                                         'requireLetters' => true,
-                                         'requireSpecialCharacter' => true,
-                                         'requireNumbers' => true,
-                                         'requireCaseDiff' => true,
-                                         'minLength' => 8
-                                     ]
-                        ),
-                        new Length(
-                            max: 4096,
-                            minMessage: 'Votre mot de passe doit avoir moins de {{ limit }} caractères'
-                        )
-                    ],
-                ]
-            );
+                        'placeholder' => 'Renseignez un mot de passe sécurisé'
+                    ]
+                ],
+                'second_options' => [
+                    'label' => 'Mot de passe (Confirmation)',
+                    'attr' => [
+                        'placeholder' => 'Confirmez votre mot de passe'
+                    ]
+                ],
+                'invalid_message' => 'Les mots de passe renseignés ne correspondent pas',
+                'empty_data' => ''
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => User::class,
-            ]
-        );
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
     }
 }

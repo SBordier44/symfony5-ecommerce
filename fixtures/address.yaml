@@ -1,0 +1,13 @@
+App\Entity\Address:
+  address_{1..30}:
+    firstName: <firstName()>
+    lastName: <lastName()>
+    birthDate: <dateTimeThisCentury()>
+    street: <streetAddress()>
+    zipCode: <postcode()>
+    city: <city()>
+    country: <country()>
+    addressName: <randomElement(['Maison', 'Travail', 'Autre'])>
+    invoiceDefault: <randomElement([1,0])>
+    deliveryDefault: <randomElement([1,0])>
+    user: '@user*'

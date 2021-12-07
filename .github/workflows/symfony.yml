@@ -47,12 +47,9 @@ jobs:
 
       - name: Prepare database
         run: |
-          php bin/console doctrine:database:create
-          php bin/console doctrine:schema:update --force
+          php bin/console doctrine:database:create --if-not-exists
+          php bin/console doctrine:migration:migrate -n
           php bin/console doctrine:fixtures:load -n
 
       - name: Analyze coding style
         run: php vendor/bin/phpcs
-
-      - name: Run Functional Tests
-        run: php vendor/bin/simple-phpunit
